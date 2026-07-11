@@ -1,33 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>Verify Certificate | IKIGAI 2026</title>
 
-    <title>Verify Certificate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-    <main class="verification-container">
+    <!-- BACKGROUND -->
 
-        <div id="result">
+    <div class="background-effects">
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+        <div class="orb orb-three"></div>
+        <div class="grid-overlay"></div>
+    </div>
 
-            Verifying Certificate...
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <a href="index.html" class="brand">
+
+            <div class="brand-icon">I</div>
+
+            <div>
+                <span class="brand-name">IKIGAI</span>
+                <span class="brand-year">2026</span>
+            </div>
+
+        </a>
+
+
+        <div class="nav-status">
+
+            <span class="status-dot"></span>
+
+            Official Verification Portal
 
         </div>
 
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="verify-page">
+
+        <section class="verify-container">
+
+            <!-- Loading State -->
+
+            <div id="loadingState" class="result-card loading-card">
+
+                <div class="loading-animation">
+
+                    <div class="loader-ring"></div>
+
+                    <div class="loader-center">
+                        I
+                    </div>
+
+                </div>
+
+
+                <h1>
+                    Verifying Certificate
+                </h1>
+
+
+                <p>
+                    Checking the certificate against the
+                    official IKIGAI 2026 database.
+                </p>
+
+
+                <div class="loading-line">
+
+                    <div class="loading-progress"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Result gets inserted here -->
+
+            <div id="result"></div>
+
+        </section>
+
     </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div>
+            © 2026 IKIGAI Hackathon
+        </div>
+
+
+        <div class="footer-status">
+
+            <span class="status-dot"></span>
+
+            Verification System Online
+
+        </div>
+
+    </footer>
+
 
     <script src="verify.js"></script>
 
 </body>
-
 </html>

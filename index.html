@@ -1,61 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Certificate Verification</title>
+    <title>IKIGAI 2026 | Certificate Verification</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <main class="verification-container">
+    <!-- Background Effects -->
 
-        <h1>Certificate Verification</h1>
+    <div class="background-effects">
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+        <div class="orb orb-three"></div>
+        <div class="grid-overlay"></div>
+    </div>
 
-        <p>
-            Verify the authenticity of certificates
-            issued during our hackathon.
-        </p>
 
-        <input
-            type="text"
-            id="certificateId"
-            placeholder="Enter Certificate ID"
-        >
+    <!-- Navigation -->
 
-        <button onclick="verifyCertificate()">
-            Verify Certificate
-        </button>
+    <nav class="navbar">
+
+        <a href="index.html" class="brand">
+            <div class="brand-icon">I</div>
+
+            <div>
+                <span class="brand-name">IKIGAI</span>
+                <span class="brand-year">2026</span>
+            </div>
+        </a>
+
+        <div class="nav-status">
+            <span class="status-dot"></span>
+            Verification Portal
+        </div>
+
+    </nav>
+
+
+    <!-- Main -->
+
+    <main class="hero">
+
+        <section class="hero-content">
+
+            <div class="event-badge">
+                <span class="badge-dot"></span>
+                OFFICIAL CERTIFICATE DATABASE
+            </div>
+
+
+            <h1>
+                Verify your
+                <span>achievement.</span>
+            </h1>
+
+
+            <p class="hero-description">
+                Validate certificates issued to participants of
+                IKIGAI 2026 through our official verification portal.
+            </p>
+
+
+            <!-- Verification Card -->
+
+            <div class="verification-card">
+
+                <div class="card-glow"></div>
+
+                <div class="card-header">
+
+                    <div class="shield-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <h2>Certificate Verification</h2>
+
+                        <p>
+                            Enter the unique certificate ID printed
+                            on your certificate.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <form id="verificationForm">
+
+                    <label for="certificateId">
+                        Certificate ID
+                    </label>
+
+                    <div class="verification-input-group">
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">⌕</span>
+
+                            <input
+                                type="text"
+                                id="certificateId"
+                                placeholder="e.g. HACK26-A7K9X2"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+
+                        <button type="submit">
+
+                            <span>Verify Certificate</span>
+
+                            <span class="button-arrow">→</span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <div id="formError" class="form-error"></div>
+
+
+                <div class="security-message">
+
+                    <span>◆</span>
+
+                    Every certificate has a unique verification ID
+                    and secure QR code.
+
+                </div>
+
+            </div>
+
+
+            <!-- Stats -->
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <strong>329+</strong>
+
+                    <span>Participants</span>
+
+                </div>
+
+
+                <div class="stat-divider"></div>
+
+
+                <div class="stat">
+
+                    <strong>100%</strong>
+
+                    <span>Verifiable</span>
+
+                </div>
+
+
+                <div class="stat-divider"></div>
+
+
+                <div class="stat">
+
+                    <strong>24/7</strong>
+
+                    <span>Online Access</span>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
 
+
+    <!-- Footer -->
+
+    <footer>
+
+        <div>
+            © 2026 IKIGAI Hackathon
+        </div>
+
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            Verification System Online
+        </div>
+
+    </footer>
+
+
     <script>
 
-        function verifyCertificate() {
+        const verificationForm =
+            document.getElementById("verificationForm");
 
-            const certificateId =
-                document.getElementById("certificateId")
-                .value.trim();
+        const certificateInput =
+            document.getElementById("certificateId");
 
-            if (certificateId === "") {
+        const formError =
+            document.getElementById("formError");
 
-                alert("Please enter a Certificate ID");
 
-                return;
+        verificationForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                const certificateId =
+                    certificateInput.value.trim();
+
+                formError.textContent = "";
+
+
+                if (!certificateId) {
+
+                    formError.textContent =
+                        "Please enter a certificate ID.";
+
+                    return;
+                }
+
+
+                window.location.href =
+                    "verify.html?id=" +
+                    encodeURIComponent(certificateId);
+
             }
-
-            window.location.href =
-                "verify.html?id=" +
-                encodeURIComponent(certificateId);
-        }
+        );
 
     </script>
 
 </body>
-
 </html>
