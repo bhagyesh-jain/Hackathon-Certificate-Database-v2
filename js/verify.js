@@ -71,10 +71,10 @@ const VerificationEngine = (() => {
             // Logic for JSON-based lookup (Array of objects)
             // If using Google Apps Script API, the filtering happens server-side
             const record = data.find(item => {
-    const normalizedItem = item.certificateId
-        .toUpperCase()
-        .replace(/\s/g, '')
-        .replace(/-/g, '');
+    const normalizedItem = (item.certificateId || "")
+    .toUpperCase()
+    .replace(/\s/g, "")
+    .replace(/-/g, "");
 
     return normalizedItem === targetId;
 });
