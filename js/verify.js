@@ -66,13 +66,18 @@ const VerificationEngine = (() => {
             }
 
             const data = await response.json();
-            
+            console.log(data);
+            console.log("Records:", data.length);
             // Logic for JSON-based lookup (Array of objects)
             // If using Google Apps Script API, the filtering happens server-side
             const record = data.find(item => {
-                const normalizedItem = item.id.toUpperCase().replace(/-/g, '');
-                return normalizedItem === targetId;
-            });
+    const normalizedItem = item.certificateId
+        .toUpperCase()
+        .replace(/\s/g, '')
+        .replace(/-/g, '');
+
+    return normalizedItem === targetId;
+});
 
             if (record) {
                 renderCertificate(record);
@@ -94,7 +99,7 @@ const VerificationEngine = (() => {
      */
     const renderCertificate = (data) => {
         fields.name.textContent = data.name;
-        fields.id.textContent = data.id; // Original formatted ID (e.g., IKI-2026-...)
+        fields.id.textContent = data.certificateId; // Original formatted ID (e.g., IKI-2026-...)
         fields.type.textContent = data.type;
         fields.date.textContent = formatDate(data.issueDate);
         fields.skills.textContent = data.skills || 'General Certification';
