@@ -1,353 +1,171 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
-
+<html lang="en" data-theme="light">
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Verify the authenticity of IKIGAI 2026 credentials.">
+    <title>Verifying Credential | IKIGAI 2026</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    
+    <!-- Typography: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Verify certificates issued by IKIGAI 2026"
-    >
-
-    <title>
-        Verify Certificate | IKIGAI 2026
-    </title>
-
-
-    <!-- APPLY SAVED THEME BEFORE PAGE LOAD -->
-
-    <script>
-
-        (function () {
-
-            const savedTheme =
-                localStorage.getItem("ikigai-theme");
-
-            const prefersLight =
-                window.matchMedia(
-                    "(prefers-color-scheme: light)"
-                ).matches;
-
-            const theme =
-                savedTheme ||
-                (prefersLight ? "light" : "dark");
-
-            document.documentElement.setAttribute(
-                "data-theme",
-                theme
-            );
-
-        })();
-
-    </script>
-
-
-    <!-- GOOGLE FONTS -->
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-
-    <!-- MAIN STYLESHEET -->
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/verify.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
-
-
 <body>
 
+    <!-- Header -->
+    <header class="site-header scrolled" id="header">
+        <nav class="container nav-wrapper">
+            <a href="index.html" class="logo-area">
+                <span class="logo-icon"><i class="ph-fill ph-shield-check"></i></span>
+                <div class="logo-text">
+                    <span class="brand-name">IKIGAI <span class="year">2026</span></span>
+                    <span class="brand-tagline">Verification Portal</span>
+                </div>
+            </a>
 
-    <!-- =====================================
-         BACKGROUND EFFECTS
-    ====================================== -->
-
-    <div
-        class="background-effects"
-        aria-hidden="true"
-    >
-
-        <div class="orb orb-one"></div>
-
-        <div class="orb orb-two"></div>
-
-        <div class="orb orb-three"></div>
-
-        <div class="grid-overlay"></div>
-
-    </div>
-
-
-
-    <!-- =====================================
-         NAVIGATION
-    ====================================== -->
-
-    <nav class="navbar">
-
-
-        <!-- BRAND -->
-
-        <a
-            href="index.html"
-            class="brand"
-            aria-label="IKIGAI 2026 Home"
-        >
-
-
-            <div class="brand-icon">
-
-                I
-
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle Dark/Light Mode">
+                    <i class="ph-bold ph-sun-dim" id="theme-icon"></i>
+                </button>
+                <a href="index.html" class="btn btn-outline btn-sm">Home</a>
             </div>
+        </nav>
+    </header>
 
+    <main class="verify-page-wrapper">
+        <div class="container">
+            <article class="verification-card">
+                
+                <!-- 1. LOADING STATE -->
+                <div id="state-loading" class="loading-container">
+                    <div class="spinner-wrapper">
+                        <div class="spinner"></div>
+                        <i class="ph-bold ph-magnifying-glass spinner-icon"></i>
+                    </div>
+                    <div class="loading-text">
+                        <h2>Verifying Credential</h2>
+                        <p>Checking record against secure database...</p>
+                    </div>
+                    <div class="loading-bar">
+                        <div class="loading-progress"></div>
+                    </div>
+                </div>
 
-            <div class="brand-information">
-
-
-                <span class="brand-name">
-
-                    IKIGAI
-
-                </span>
-
-
-                <span class="brand-year">
-
-                    2026
-
-                </span>
-
-
-            </div>
-
-
-        </a>
-
-
-
-        <!-- NAVIGATION ACTIONS -->
-
-        <div class="nav-actions">
-
-
-            <!-- SYSTEM STATUS -->
-
-            <div class="nav-status">
-
-
-                <span class="status-dot"></span>
-
-
-                <span>
-
-                    Official Verification Portal
-
-                </span>
-
-
-            </div>
-
-
-
-            <!-- THEME TOGGLE -->
-
-            <button
-                id="themeToggle"
-                class="theme-toggle"
-                type="button"
-                aria-label="Change website theme"
-            >
-
-                <!-- Added automatically by theme.js -->
-
-            </button>
-
-
-        </div>
-
-
-    </nav>
-
-
-
-    <!-- =====================================
-         VERIFICATION PAGE
-    ====================================== -->
-
-    <main class="verify-page">
-
-
-        <section class="verify-container">
-
-
-
-            <!-- =================================
-                 LOADING STATE
-            ================================== -->
-
-            <div
-                id="loadingState"
-                class="result-card loading-card"
-            >
-
-
-                <!-- LOADING ICON -->
-
-                <div class="loading-animation">
-
-
-                    <div class="loader-ring"></div>
-
-
-                    <div class="loader-center">
-
-                        I
-
+                <!-- 2. SUCCESS STATE -->
+                <div id="state-success" class="result-content hidden">
+                    <div class="status-banner success">
+                        <div class="status-icon">
+                            <i class="ph-bold ph-check"></i>
+                        </div>
+                        <h1 class="status-title">Verified Credential</h1>
+                        <p class="status-subtitle">This certificate is authentic and officially issued by IKIGAI 2026.</p>
                     </div>
 
+                    <div class="certificate-details">
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <label>Recipient Name</label>
+                                <p id="cert-name">---</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Credential ID</label>
+                                <p id="cert-id-display">---</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Credential Type</label>
+                                <p id="cert-type">---</p>
+                            </div>
+                            <div class="detail-item">
+                                <label>Issue Date</label>
+                                <p id="cert-date">---</p>
+                            </div>
+                            <div class="detail-item full-width">
+                                <label>Skills / Recognition</label>
+                                <p id="cert-skills">---</p>
+                            </div>
+                        </div>
 
+                        <!-- Verification Timeline -->
+                        <div class="verification-timeline">
+                            <h3 class="timeline-title">Verification Trace</h3>
+                            <div class="timeline-list">
+                                <div class="timeline-step completed">
+                                    <div class="step-info">
+                                        <h4>Certificate Issued</h4>
+                                        <p id="timeline-issued">Officially recorded in global database.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step completed">
+                                    <div class="step-info">
+                                        <h4>Integrity Verified</h4>
+                                        <p>Digital signature matches official records.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="step-info">
+                                        <h4>System Check</h4>
+                                        <p>Status: Active / Non-Revoked.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <a href="index.html" class="btn btn-outline">Verify Another</a>
+                        <a href="#" id="view-pdf-btn" target="_blank" class="btn btn-primary">
+                            <i class="ph-bold ph-file-pdf"></i>
+                            <span>View Certificate PDF</span>
+                        </a>
+                    </div>
                 </div>
 
-
-
-                <!-- LOADING HEADING -->
-
-                <h1>
-
-                    Verifying Certificate
-
-                </h1>
-
-
-
-                <!-- LOADING DESCRIPTION -->
-
-                <p>
-
-                    Checking the certificate against
-                    the official IKIGAI 2026
-                    certificate database.
-
-                </p>
-
-
-
-                <!-- LOADING PROGRESS BAR -->
-
-                <div class="loading-line">
-
-
-                    <div class="loading-progress"></div>
-
-
+                <!-- 3. ERROR STATE -->
+                <div id="state-error" class="error-content hidden">
+                    <i class="ph-bold ph-warning-octagon error-illustration"></i>
+                    <h1 class="status-title">Verification Failed</h1>
+                    <p class="status-subtitle">The ID entered does not match any records in our database.</p>
+                    
+                    <div class="error-actions">
+                        <a href="index.html" class="btn btn-primary">
+                            <i class="ph-bold ph-arrow-left"></i>
+                            <span>Back to Home</span>
+                        </a>
+                    </div>
                 </div>
 
-
-            </div>
-
-
-
-            <!-- =================================
-                 RESULT CONTAINER
-            ================================== -->
-
-            <div
-                id="result"
-                aria-live="polite"
-            >
-
-                <!--
-                    Certificate verification result
-                    is generated by verify.js
-                -->
-
-            </div>
-
-
-        </section>
-
-
+            </article>
+        </div>
     </main>
 
-
-
-    <!-- =====================================
-         FOOTER
-    ====================================== -->
-
-    <footer>
-
-
-        <!-- COPYRIGHT -->
-
-        <div class="footer-copyright">
-
-            © 2026 IKIGAI Hackathon
-
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-bottom">
+            <p>&copy; 2026 IKIGAI Organization. Secure Verification v2.0</p>
+            <div class="social-links">
+                <a href="#"><i class="ph-bold ph-shield-check"></i> Official System</a>
+            </div>
         </div>
-
-
-
-        <!-- SYSTEM STATUS -->
-
-        <div class="footer-status">
-
-
-            <span class="status-dot"></span>
-
-
-            <span>
-
-                Verification System Online
-
-            </span>
-
-
-        </div>
-
-
     </footer>
 
+    <!-- Global Components -->
+    <div id="toast-container" class="toast-container"></div>
 
-
-    <!-- =====================================
-         THEME SYSTEM
-    ====================================== -->
-
-    <script src="theme.js"></script>
-
-
-
-    <!-- =====================================
-         CERTIFICATE VERIFICATION
-    ====================================== -->
-
-    <script src="verify.js"></script>
-
-
+    <!-- Scripts -->
+    <script src="js/theme.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/verify.js"></script>
 </body>
-
 </html>

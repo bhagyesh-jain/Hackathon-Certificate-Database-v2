@@ -1,0 +1,207 @@
+/* 
+ * IKIGAI 2026 Official Certificate Verification System
+ * Responsive Design & Media Queries
+ */
+
+/* --- Large Desktops (Default styles cover up to 1200px) --- */
+
+/* --- Laptops & Tablets (max-width: 1024px) --- */
+@media (max-width: 1024px) {
+    section { padding: 4rem 0; }
+
+    .hero-grid {
+        gap: 2rem;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .steps-grid, 
+    .types-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .type-card.featured {
+        transform: scale(1); /* Reset scale for tablet layout */
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-brand {
+        grid-column: span 2;
+        margin-bottom: 2rem;
+    }
+}
+
+/* --- Mobile Devices (max-width: 768px) --- */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Hidden by default, toggled by JS */
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 2rem;
+    }
+
+    .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .search-wrapper {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    #cert-id-input {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+    }
+
+    #verify-btn {
+        width: 100%;
+    }
+
+    .hero-visual {
+        order: -1; /* Move visual above text on mobile */
+        margin-bottom: 3rem;
+    }
+
+    .glass-card-decoration {
+        width: 280px;
+        height: 180px;
+    }
+
+    .steps-grid, 
+    .types-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    /* Verification Page Mobile */
+    .verification-card {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .detail-item.full-width {
+        grid-column: span 1;
+    }
+
+    .action-area {
+        flex-direction: column-reverse;
+        padding: 1.5rem;
+    }
+
+    .action-area .btn {
+        width: 100%;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+}
+
+/* --- Small Mobile (max-width: 480px) --- */
+@media (max-width: 480px) {
+    html { font-size: 14px; }
+
+    .site-header .btn {
+        display: none; /* Hide 'Verify Now' button in header for very small screens */
+    }
+
+    .hero-title {
+        font-size: 2.25rem;
+    }
+
+    .logo-cloud {
+        gap: 1.5rem;
+    }
+
+    .logo-item {
+        font-size: 1.1rem;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+
+    .certificate-details {
+        padding: 1.5rem;
+    }
+
+    .status-title {
+        font-size: 1.4rem;
+    }
+
+    .toast-container {
+        left: 1rem;
+        right: 1rem;
+        top: 1rem;
+    }
+
+    .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+    }
+}
+
+/* --- Utility for hidden elements --- */
+.hidden {
+    display: none !important;
+}
+
+/* --- Accessibility: Focus States --- */
+:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* --- Print Styles --- */
+@media print {
+    .site-header, 
+    .footer-bottom, 
+    .action-area, 
+    .back-to-top,
+    .trust-section,
+    .faq-section {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+
+    .verification-card {
+        box-shadow: none;
+        border: 1px solid #eee;
+    }
+}
