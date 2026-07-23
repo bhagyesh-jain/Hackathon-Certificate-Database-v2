@@ -101,9 +101,9 @@ const VerificationEngine = (() => {
         fields.name.textContent = data.name;
         fields.id.textContent = data.certificateId; // Original formatted ID (e.g., IKI-2026-...)
         fields.type.textContent = data.type;
-        fields.date.textContent = formatDate(data.issueDate);
-        fields.skills.textContent = data.skills || 'General Certification';
-        fields.timelineDate.textContent = `Officially recorded on ${formatDate(data.issueDate)}`;
+fields.date.textContent = "21 August 2026";
+fields.timelineDate.textContent = "Officially recorded on 21 August 2026";       
+ fields.skills.textContent = data.skills || 'General Certification';
         
         if (data.pdfUrl) {
             fields.pdfBtn.href = data.pdfUrl;
