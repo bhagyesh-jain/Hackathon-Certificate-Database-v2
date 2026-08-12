@@ -22,7 +22,8 @@ const VerificationEngine = (() => {
         date: document.getElementById('cert-date'),
         timelineDate: document.getElementById('timeline-issued'),
         pdfBtn: document.getElementById('view-pdf-btn')
-    };
+    downloadBtn: document.getElementById("download-pdf-btn"),
+};
 
     const init = async () => {
         const { series, number, legacyId } = getVerificationParams();
@@ -83,11 +84,29 @@ const VerificationEngine = (() => {
         fields.timelineDate.textContent = `Officially recorded on ${data.issueDate || '21 August 2026'}`;
 
         if (data.pdfUrl) {
-            fields.pdfBtn.href = data.pdfUrl;
-            fields.pdfBtn.style.display = 'inline-flex';
-        } else {
-            fields.pdfBtn.style.display = 'none';
-        }
+    const viewUrl = getCertificateViewUrl(data.pdfUrl);
+
+    if (fields.pdfBtn) {
+        fields.pdfBtn.href = viewUrl;
+        fields.pdfBtn.target = "_blank";
+        fields.pdfBtn.rel = "noopener noreferrer";
+        fields.pdfBtn.style.display = "inline-flex";
+        fields.pdfBtn.style.pointerEvents = "auto";
+        fields.pdfBtn.removeAttribute("aria-disabled");
+    }
+
+    if (fields.downloadBtn) {
+        fields.downloadBtn.href = getCertificateDownloadUrl(data.pdfUrl);
+        fields.downloadBtn.target = "_blank";
+        fields.downloadBtn.rel = "noopener noreferrer";
+        fields.downloadBtn.style.display = "inline-flex";
+        fields.downloadBtn.style.pointerEvents = "auto";
+        fields.downloadBtn.removeAttribute("aria-disabled");
+    }
+} else {
+    if (fields.pdfBtn) fields.pdfBtn.style.display = "none";
+    if (fields.downloadBtn) fields.downloadBtn.style.display = "none";
+}
     };
 
     const showState = (activeState) => {
@@ -112,3 +131,29 @@ const VerificationEngine = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', VerificationEngine.init);
+
+
+function getDriveFileId(url) {
+    if (!url) return "";
+    const value = String(url).trim();
+
+    const match = value.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (match) return match[1];
+
+    const queryMatch = value.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    return queryMatch ? queryMatch[1] : "";
+}
+
+function getCertificateViewUrl(url) {
+    const fileId = getDriveFileId(url);
+    return fileId
+        ? `https://drive.google.com/file/d/${fileId}/view`
+        : String(url || "").trim();
+}
+
+function getCertificateDownloadUrl(url) {
+    const fileId = getDriveFileId(url);
+    return fileId
+        ? `https://drive.google.com/uc?export=download&id=${fileId}`
+        : String(url || "").trim();
+}

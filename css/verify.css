@@ -255,3 +255,8 @@
     justify-content: center;
     gap: 1rem;
 }
+
+/* Certificate actions */
+#download-pdf-btn {
+    text-decoration: none;
+}
