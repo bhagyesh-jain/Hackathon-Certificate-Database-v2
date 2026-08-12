@@ -1,16 +1,11 @@
 /**
  * IKIGAI 2026 - Verification Logic
- * Handles URL parsing, data fetching, and state rendering.
+ * Verifies certificates using a series + short certificate number.
  */
 
 const VerificationEngine = (() => {
-    
-    // CONFIGURATION: 
-    // To switch to production, replace LOCAL_DATA_PATH with your Google Apps Script Web App URL
-    const API_ENDPOINT = 'data/certificates.json'; 
-    const USE_MOCK_FOR_DEMO = false; // Set to true only for local testing without a server
+    const API_ENDPOINT = 'data/certificates.json';
 
-    // DOM Elements
     const states = {
         loading: document.getElementById('state-loading'),
         success: document.getElementById('state-success'),
@@ -20,64 +15,49 @@ const VerificationEngine = (() => {
     const fields = {
         name: document.getElementById('cert-name'),
         id: document.getElementById('cert-id-display'),
+        series: document.getElementById('cert-series'),
         type: document.getElementById('cert-type'),
+        institute: document.getElementById('cert-institute'),
+        team: document.getElementById('cert-team'),
         date: document.getElementById('cert-date'),
-        skills: document.getElementById('cert-skills'),
         timelineDate: document.getElementById('timeline-issued'),
         pdfBtn: document.getElementById('view-pdf-btn')
     };
 
-    /**
-     * Entry point for verification
-     */
     const init = async () => {
-        const certId = getCertIdFromUrl();
+        const { series, number, legacyId } = getVerificationParams();
 
-        if (!certId) {
-            showState('error');
-            return;
+        if (!series || !number) {
+            // Backward compatibility for direct old-style URLs during transition.
+            if (!legacyId) {
+                showState('error');
+                return;
+            }
         }
 
-        // Artificial delay for enterprise "Security Scanning" feel (1.5s)
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        performLookup(certId);
+        await new Promise(resolve => setTimeout(resolve, 900));
+        performLookup(series, number, legacyId);
     };
 
-    /**
-     * Extracts 'id' parameter from URL
-     */
-    const getCertIdFromUrl = () => {
+    const getVerificationParams = () => {
         const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
-        return id ? id.toUpperCase().replace(/\s/g, '').replace(/-/g, '') : null;
+        const series = (params.get('series') || '').trim().toUpperCase();
+        const number = (params.get('number') || '').replace(/\D/g, '').padStart(4, '0').slice(-6);
+        const legacyId = (params.get('id') || '').trim().toUpperCase().replace(/\s/g, '').replace(/-/g, '');
+        return { series, number, legacyId };
     };
 
-    /**
-     * Fetches certificate data from the source
-     * @param {string} targetId - The sanitized ID to look for
-     */
-    const performLookup = async (targetId) => {
+    const normalize = (value) => String(value || '').toUpperCase().replace(/\s/g, '').replace(/-/g, '');
+
+    const performLookup = async (series, number, legacyId) => {
         try {
-            const response = await fetch(API_ENDPOINT);
-            
-            if (!response.ok) {
-                throw new Error('Database connection failed');
-            }
+            const response = await fetch(API_ENDPOINT, { cache: 'no-store' });
+            if (!response.ok) throw new Error('Database connection failed');
 
             const data = await response.json();
-            console.log(data);
-            console.log("Records:", data.length);
-            // Logic for JSON-based lookup (Array of objects)
-            // If using Google Apps Script API, the filtering happens server-side
-            const record = data.find(item => {
-    const normalizedItem = (item.certificateId || "")
-    .toUpperCase()
-    .replace(/\s/g, "")
-    .replace(/-/g, "");
+            const targetId = series && number ? normalize(`${series}-${number}`) : legacyId;
 
-    return normalizedItem === targetId;
-});
+            const record = data.find(item => normalize(item.certificateId) === targetId);
 
             if (record) {
                 renderCertificate(record);
@@ -85,37 +65,31 @@ const VerificationEngine = (() => {
             } else {
                 showState('error');
             }
-
         } catch (error) {
             console.error('Verification Error:', error);
             showState('error');
-            UIManager.showToast('Unable to connect to verification server', 'error');
+            if (window.UIManager) UIManager.showToast('Unable to connect to verification server', 'error');
         }
     };
 
-    /**
-     * Populates the Success UI with record data
-     * @param {Object} data 
-     */
     const renderCertificate = (data) => {
-        fields.name.textContent = data.name;
-        fields.id.textContent = data.certificateId; // Original formatted ID (e.g., IKI-2026-...)
-        fields.type.textContent = data.type;
-fields.date.textContent = "21 August 2026";
-fields.timelineDate.textContent = "Officially recorded on 21 August 2026";       
- fields.skills.textContent = data.skills || 'General Certification';
-        
+        fields.name.textContent = data.name || '---';
+        fields.id.textContent = data.certificateId || '---';
+        fields.series.textContent = data.certificateSeries || '---';
+        fields.type.textContent = data.type || 'Participation';
+        fields.institute.textContent = data.institute || '---';
+        fields.team.textContent = data.team || '---';
+        fields.date.textContent = data.issueDate || '21 August 2026';
+        fields.timelineDate.textContent = `Officially recorded on ${data.issueDate || '21 August 2026'}`;
+
         if (data.pdfUrl) {
             fields.pdfBtn.href = data.pdfUrl;
+            fields.pdfBtn.style.display = 'inline-flex';
         } else {
             fields.pdfBtn.style.display = 'none';
         }
     };
 
-    /**
-     * Switches between different UI containers
-     * @param {string} activeState - 'loading', 'success', or 'error'
-     */
     const showState = (activeState) => {
         Object.keys(states).forEach(key => {
             if (key === activeState) {
@@ -127,27 +101,14 @@ fields.timelineDate.textContent = "Officially recorded on 21 August 2026";
             }
         });
 
-        // Update page title based on status
         if (activeState === 'success') {
             document.title = `Verified: ${fields.name.textContent} | IKIGAI 2026`;
         } else if (activeState === 'error') {
-            document.title = `Verification Failed | IKIGAI 2026`;
+            document.title = 'Verification Failed | IKIGAI 2026';
         }
     };
 
-    /**
-     * Formats ISO dates to professional display format
-     * @param {string} dateString 
-     */
-    const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
-    };
-
-    return {
-        init
-    };
+    return { init };
 })();
 
-// Start verification on load
 document.addEventListener('DOMContentLoaded', VerificationEngine.init);

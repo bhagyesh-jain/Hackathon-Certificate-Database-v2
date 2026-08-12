@@ -63,19 +63,12 @@
         margin-right: auto;
     }
 
-    .search-wrapper {
-        flex-direction: column;
+    .verification-inputs {
+        grid-template-columns: 1fr;
         padding: 1rem;
-        gap: 1rem;
     }
 
-    #cert-id-input {
-        width: 100%;
-        text-align: center;
-        padding: 0.5rem;
-    }
-
-    #verify-btn {
+    .verify-submit {
         width: 100%;
     }
 
@@ -203,5 +196,16 @@
     .verification-card {
         box-shadow: none;
         border: 1px solid #eee;
+    }
+}
+
+/* Certificate verification inputs */
+@media (max-width: 720px) {
+    .verification-inputs {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+    .verify-submit {
+        width: 100%;
     }
 }

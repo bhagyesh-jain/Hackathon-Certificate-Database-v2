@@ -63,27 +63,40 @@
                     <div class="badge">Official Verification System v2.0</div>
                     <h1 class="hero-title">Verify Your <br><span class="text-gradient">Achievement.</span></h1>
                     <p class="hero-description">
-                        Enter your unique Certificate ID to validate authenticity. Our secure system confirms credentials issued during the IKIGAI 2026 Global Summit.
+                        Select your certificate series and enter the short certificate number to validate authenticity. Our secure system confirms credentials issued during IKIGAI 2026.
                     </p>
 
                     <!-- Search Box -->
                     <div class="search-container">
-                        <div class="search-wrapper">
-                            <i class="ph-bold ph-magnifying-glass search-icon"></i>
-                            <input 
-                                type="text" 
-                                id="cert-id-input" 
-                                placeholder="Enter Certificate ID (e.g. IKI-2026-XXXX)" 
-                                spellcheck="false"
-                                autocomplete="off"
-                                aria-label="Certificate ID"
-                            >
-                            <button id="verify-btn" class="btn btn-primary">
+                        <div class="verification-inputs">
+                            <div class="series-field">
+                                <label for="cert-series-input">Certificate Series</label>
+                                <select id="cert-series-input" aria-label="Certificate Series">
+                                    <option value="IKIGAI26">IKIGAI26</option>
+                                </select>
+                            </div>
+                            <div class="number-field">
+                                <label for="cert-number-input">Certificate Number</label>
+                                <div class="number-wrapper">
+                                    <i class="ph-bold ph-hash search-icon"></i>
+                                    <input
+                                        type="text"
+                                        id="cert-number-input"
+                                        inputmode="numeric"
+                                        maxlength="6"
+                                        placeholder="0001"
+                                        spellcheck="false"
+                                        autocomplete="off"
+                                        aria-label="Certificate Number"
+                                    >
+                                </div>
+                            </div>
+                            <button id="verify-btn" class="btn btn-primary verify-submit">
                                 <span>Verify</span>
                                 <i class="ph-bold ph-arrow-right"></i>
                             </button>
                         </div>
-                        <p class="search-hint">Example: IKI-2026-8842-9901</p>
+                        <p class="search-hint">Enter the 4-digit number printed below the certificate series. Example: 0042</p>
                     </div>
                 </div>
 
@@ -132,7 +145,7 @@
                     <div class="step-card">
                         <div class="step-icon"><i class="ph-bold ph-qr-code"></i></div>
                         <h3>Scan or Enter</h3>
-                        <p>Scan the shared QR code on the certificate or manually enter the unique ID provided.</p>
+                        <p>Scan the shared QR code on the certificate, then select the series and enter the 4-digit certificate number.</p>
                     </div>
                     <div class="step-card">
                         <div class="step-icon"><i class="ph-bold ph-database"></i></div>
@@ -211,11 +224,11 @@
                 <div class="faq-container">
                     <div class="faq-item">
                         <button class="faq-question">
-                            <span>How do I find my Certificate ID?</span>
+                            <span>How do I find my Certificate Number?</span>
                             <i class="ph-bold ph-caret-down"></i>
                         </button>
                         <div class="faq-answer">
-                            <p>Your unique Certificate ID is located at the bottom-right corner of your official IKIGAI 2026 certificate, just below the QR code.</p>
+                            <p>Your Certificate Number is printed in the bottom-right verification panel, directly above the QR code. Select the matching series and enter that number here.</p>
                         </div>
                     </div>
                     <div class="faq-item">
