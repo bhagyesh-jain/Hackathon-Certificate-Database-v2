@@ -77,7 +77,7 @@ const UIManager = (() => {
      * Smooth scrolling for anchor links
      */
     const handleSmoothScrolling = () => {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        document.querySelectorAll('a[href^="#"]:not(#view-pdf-btn):not(#download-pdf-btn)').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
