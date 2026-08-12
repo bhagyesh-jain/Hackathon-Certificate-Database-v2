@@ -21,7 +21,7 @@ const VerificationEngine = (() => {
         team: document.getElementById('cert-team'),
         date: document.getElementById('cert-date'),
         timelineDate: document.getElementById('timeline-issued'),
-        pdfBtn: document.getElementById('view-pdf-btn')
+        pdfBtn: document.getElementById('view-pdf-btn'),
     downloadBtn: document.getElementById("download-pdf-btn"),
 };
 
