@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Official Certificate Verification System for IKIGAI 2026. Verify the authenticity of credentials issued during the event.">
+    <meta name="author" content="IKIGAI 2026">
+    <title>Verify Credentials | IKIGAI 2026 Official Verification</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    
+    <!-- Typography: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="site-header" id="header">
+        <nav class="container nav-wrapper">
+            <a href="index.html" class="logo-area" aria-label="IKIGAI 2026 Home">
+                <span class="logo-icon"><i class="ph-fill ph-shield-check"></i></span>
+                <div class="logo-text">
+                    <span class="brand-name">IKIGAI <span class="year">2026</span></span>
+                    <span class="brand-tagline">Verification Portal</span>
+                </div>
+            </a>
+
+            <ul class="nav-links" role="list">
+                <li><a href="#how-it-works" class="nav-link">How it works</a></li>
+                <li><a href="#certificate-types" class="nav-link">Credentials</a></li>
+                <li><a href="#faq" class="nav-link">Support</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle Dark/Light Mode">
+                    <i class="ph-bold ph-sun-dim" id="theme-icon"></i>
+                </button>
+                <a href="#verify-section" class="btn btn-primary btn-sm">Verify Now</a>
+            </div>
+
+            <button class="mobile-menu-toggle" aria-label="Open Menu">
+                <i class="ph-bold ph-list"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section" id="verify-section">
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <div class="badge">Official Verification System v2.0</div>
+                    <h1 class="hero-title">Verify Your <br><span class="text-gradient">Achievement.</span></h1>
+                    <p class="hero-description">
+                        Select your certificate series and enter the short certificate number to validate authenticity. Our secure system confirms credentials issued during IKIGAI 2026.
+                    </p>
+
+                    <!-- Search Box -->
+                    <div class="search-container">
+                        <div class="search-mode-toggle" role="tablist" aria-label="Search method">
+                            <button type="button" class="search-mode-btn active" data-search-mode="id"><i class="ph-bold ph-hash"></i> Certificate ID</button>
+                            <button type="button" class="search-mode-btn" data-search-mode="name"><i class="ph-bold ph-magnifying-glass"></i> Search by Name</button>
+                        </div>
+                        <div id="id-search-panel">
+                        <div class="verification-inputs">
+                            <div class="series-field">
+                                <label for="cert-series-input">Certificate Series</label>
+                                <select id="cert-series-input" aria-label="Certificate Series">
+                                    <option value="IKIGAI26">IKIGAI26</option>
+                                </select>
+                            </div>
+                            <div class="number-field">
+                                <label for="cert-number-input">Certificate Number</label>
+                                <div class="number-wrapper">
+                                    <i class="ph-bold ph-hash search-icon"></i>
+                                    <input
+                                        type="text"
+                                        id="cert-number-input"
+                                        inputmode="numeric"
+                                        maxlength="6"
+                                        placeholder="0001"
+                                        spellcheck="false"
+                                        autocomplete="off"
+                                        aria-label="Certificate Number"
+                                    >
+                                </div>
+                            </div>
+                            <button id="verify-btn" class="btn btn-primary verify-submit">
+                                <span>Verify</span>
+                                <i class="ph-bold ph-arrow-right"></i>
+                            </button>
+                        </div>
+                        <p class="search-hint">Enter the 4-digit number printed below the certificate series. Example: 0042</p>
+                        </div>
+                        <div id="name-search-panel" class="name-search-panel" hidden>
+                            <label for="participant-name-input">Participant Name</label>
+                            <div class="name-search-row">
+                                <div class="name-wrapper">
+                                    <i class="ph-bold ph-user search-icon"></i>
+                                    <input type="text" id="participant-name-input" placeholder="START TYPING YOUR NAME" autocomplete="off" spellcheck="false" aria-label="Participant Name" aria-autocomplete="list" aria-expanded="false">
+                                    <div id="name-suggestions" class="name-suggestions" role="listbox" hidden></div>
+                                </div>
+                                <button id="name-search-btn" class="btn btn-primary verify-submit"><span>Search</span><i class="ph-bold ph-magnifying-glass"></i></button>
+                            </div>
+                            <p class="search-hint">Search using a full name or part of a participant's name.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="glass-card-decoration anim-float">
+                        <div class="card-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                        </div>
+                        <div class="card-body">
+                            <i class="ph-fill ph-seal-check"></i>
+                            <div class="skeleton-line long"></div>
+                            <div class="skeleton-line short"></div>
+                        </div>
+                    </div>
+                    <div class="hero-blob"></div>
+                </div>
+            </div>
+        </section>
+
+        
+        <!-- Trust Section 
+        <section class="trust-section">
+            <div class="container">
+                <p class="trust-label">Trusted by industry leaders worldwide</p>
+                <div class="logo-cloud">
+                    <div class="logo-item"><i class="ph-bold ph-microsoft-logo"></i> Microsoft</div>
+                    <div class="logo-item"><i class="ph-bold ph-google-logo"></i> Google</div>
+                    <div class="logo-item"><i class="ph-bold ph-apple-logo"></i> Apple</div>
+                    <div class="logo-item"><i class="ph-bold ph-adobe-logo"></i> Adobe</div>
+                    <div class="logo-item"><i class="ph-bold ph-stripe-logo"></i> Stripe</div>
+                </div>
+            </div>
+        </section>
+        -->
+        <!-- How it Works -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <div class="section-header align-center">
+                    <h2 class="section-title">Seamless Verification</h2>
+                    <p class="section-subtitle">A simple three-step process to validate any official IKIGAI credential.</p>
+                </div>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-icon"><i class="ph-bold ph-qr-code"></i></div>
+                        <h3>Scan or Enter</h3>
+                        <p>Scan the shared QR code on the certificate, then select the series and enter the 4-digit certificate number.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="ph-bold ph-database"></i></div>
+                        <h3>Instant Lookup</h3>
+                        <p>Our secure database fetches the encrypted record associated with your credential ID.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-icon"><i class="ph-bold ph-certificate"></i></div>
+                        <h3>View Details</h3>
+                        <p>Instantly access the holder's name, issue date, and view the original PDF version.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificate Types -->
+        <section class="cert-types" id="certificate-types">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Supported Credentials</h2>
+                    <p class="section-subtitle">We verify all tiers of IKIGAI 2026 certifications.</p>
+                </div>
+
+                <div class="types-grid">
+                    <div class="type-card">
+                        <div class="type-tag">Core</div>
+                        <h3>Participation</h3>
+                        <p>Verified attendance of the 3-day IKIGAI global workshop series.</p>
+                        <i class="ph ph-users-three type-bg-icon"></i>
+                    </div>
+                    <div class="type-card featured">
+                        <div class="type-tag gold">Elite</div>
+                        <h3>Excellence Award</h3>
+                        <p>Recognizing top performers in the IKIGAI technical innovation challenge.</p>
+                        <i class="ph ph-crown type-bg-icon"></i>
+                    </div>
+                    <div class="type-card">
+                        <div class="type-tag">Pro</div>
+                        <h3>Workshop Lead</h3>
+                        <p>Certified facilitators who managed technical tracks during the event.</p>
+                        <i class="ph ph-chalkboard-teacher type-bg-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics 
+        <section class="stats-section">
+            <div class="container stats-grid">
+                <div class="stat-item">
+                    <h2 class="stat-number" data-target="15000">0</h2>
+                    <p class="stat-label">Certificates Issued</p>
+                </div>
+                <div class="stat-item">
+                    <h2 class="stat-number" data-target="85">0</h2>
+                    <p class="stat-label">Countries Represented</p>
+                </div>
+                <div class="stat-item">
+                    <h2 class="stat-number" data-target="99">0</h2>
+                    <p class="stat-label">Verification Uptime %</p>
+                </div>
+                <div class="stat-item">
+                    <h2 class="stat-number" data-target="100">0</h2>
+                    <p class="stat-label">Tamper-proof Security</p>
+                </div>
+            </div>
+        </section>
+-->
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="container narrow">
+                <div class="section-header align-center">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                </div>
+
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>How do I find my Certificate Number?</span>
+                            <i class="ph-bold ph-caret-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Your Certificate Number is printed in the bottom-right verification panel, directly above the QR code. Select the matching series and enter that number here.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Why is my certificate not being found?</span>
+                            <i class="ph-bold ph-caret-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Ensure you are entering the ID exactly as it appears. Omit any extra spaces. If the problem persists, please contact support@ikigai2026.com.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Can I share my verification link?</span>
+                            <i class="ph-bold ph-caret-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Yes, once you verify your certificate, you can copy the URL of the results page to share with employers or on LinkedIn.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer 
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <div class="logo-area">
+                    <span class="logo-icon"><i class="ph-fill ph-shield-check"></i></span>
+                    <span class="brand-name">IKIGAI 2026</span>
+                </div>
+                <p class="footer-desc">The official credential integrity platform for the IKIGAI Global Summit 2026.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Report Issue</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 IKIGAI Organization. All rights reserved. Built for the future of digital credentials.</p>
+            <div class="social-links">
+                <a href="#"><i class="ph-bold ph-linkedin-logo"></i></a>
+                <a href="#"><i class="ph-bold ph-twitter-logo"></i></a>
+                <a href="#"><i class="ph-bold ph-github-logo"></i></a>
+            </div>
+        </div>
+    </footer>
+    -->
+    <!-- Global Components -->
+    <div id="toast-container" class="toast-container"></div>
+    
+    <button id="back-to-top" class="back-to-top" aria-label="Back to Top">
+        <i class="ph-bold ph-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/theme.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

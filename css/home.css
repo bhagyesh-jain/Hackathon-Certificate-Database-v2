@@ -1,0 +1,497 @@
+/* 
+ * IKIGAI 2026 Official Certificate Verification System
+ * Homepage Specific Styles
+ */
+
+/* --- Hero Section --- */
+.hero-section {
+    padding-top: 10rem;
+    padding-bottom: 6rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: center;
+    gap: 4rem;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    max-width: 540px;
+}
+
+/* --- Verification Input UI --- */
+.search-container {
+    max-width: 700px;
+}
+
+.verification-inputs {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr auto;
+    gap: 0.75rem;
+    align-items: end;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 0.9rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition);
+}
+
+.verification-inputs:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.series-field, .number-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.series-field label, .number-field label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.series-field select, #cert-number-input {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.7rem 0.9rem;
+    border-radius: calc(var(--radius-lg) - 4px);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    background: var(--bg-body);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.series-field select {
+    cursor: pointer;
+}
+
+.number-wrapper {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    border: 1px solid var(--border-color);
+    border-radius: calc(var(--radius-lg) - 4px);
+    background: var(--bg-body);
+}
+
+.number-wrapper:focus-within {
+    border-color: var(--primary);
+}
+
+.number-wrapper .search-icon {
+    margin-left: 0.85rem;
+    font-size: 1.15rem;
+    color: var(--secondary);
+}
+
+#cert-number-input {
+    border: none;
+    background: transparent;
+    text-align: center;
+    letter-spacing: 0.18em;
+}
+
+.verify-submit {
+    min-height: 48px;
+    white-space: nowrap;
+}
+
+.search-hint {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    padding-left: 0.5rem;
+}
+
+/* --- Hero Visual & Glassmorphism --- */
+.hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass-card-decoration {
+    width: 320px;
+    height: 200px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    position: relative;
+    z-index: 2;
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 2rem;
+}
+
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.red { background: #ff5f56; }
+.dot.yellow { background: #ffbd2e; }
+.dot.green { background: #27c93f; }
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.card-body i {
+    font-size: 4rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-line {
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.skeleton-line.long { width: 80%; }
+.skeleton-line.short { width: 50%; }
+
+.hero-blob {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, var(--primary-light), #c4b5fd);
+    filter: blur(80px);
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+[data-theme="dark"] .hero-blob {
+    background: linear-gradient(135deg, #1e3a8a, #4c1d95);
+    opacity: 0.3;
+}
+
+/* --- Trust Section --- */
+.trust-section {
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.trust-label {
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+}
+
+.logo-cloud {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    opacity: 0.6;
+    filter: grayscale(1);
+    transition: var(--transition);
+}
+
+.logo-cloud:hover { filter: grayscale(0); opacity: 1; }
+
+.logo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Search by name */
+.search-mode-toggle{display:flex;gap:8px;margin-bottom:18px}.search-mode-btn{flex:1;border:1px solid var(--border-color,rgba(100,100,100,.25));background:transparent;color:inherit;padding:10px 14px;border-radius:10px;cursor:pointer;font:inherit}.search-mode-btn.active{background:var(--primary-color,#4f46e5);color:#fff;border-color:var(--primary-color,#4f46e5)}.name-search-panel label{display:block;margin-bottom:8px;font-weight:600}.name-search-row{display:flex;gap:12px;align-items:stretch}.name-wrapper{position:relative;flex:1}.name-wrapper .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);opacity:.65}.name-wrapper input{width:100%;height:100%;padding-left:46px}@media(max-width:640px){.search-mode-toggle{flex-direction:column}.name-search-row{flex-direction:column}}
+
+
+/* =========================================================
+   SEARCH BY NAME - LIVE PARTICIPANT SUGGESTIONS
+   ========================================================= */
+
+.search-mode-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.search-mode-btn {
+    flex: 1;
+    border: 1px solid var(--border-color, rgba(100, 100, 100, .25));
+    background: transparent;
+    color: inherit;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font: inherit;
+}
+
+.search-mode-btn.active {
+    background: var(--primary, #4f46e5);
+    color: #fff;
+    border-color: var(--primary, #4f46e5);
+}
+
+.name-search-panel label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.name-search-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+}
+
+.name-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.name-wrapper .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 24px;
+    transform: translateY(-50%);
+    opacity: .65;
+    z-index: 2;
+}
+
+.name-wrapper input {
+    width: 100%;
+    padding-left: 46px;
+    text-transform: uppercase;
+}
+
+/* Scrollable participant dropdown: approximately five names visible */
+.name-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 50;
+    max-height: 270px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-card, #fff);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, .14);
+    padding: 6px;
+}
+
+.name-suggestion {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-primary, inherit);
+    text-align: left;
+    font: inherit;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.name-suggestion:hover,
+.name-suggestion.active {
+    background: var(--primary-light, rgba(198, 181, 255, 0.1));
+}
+
+.name-suggestion-empty {
+    padding: 14px;
+    color: var(--text-muted);
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+@media (max-width: 640px) {
+    .search-mode-toggle,
+    .name-search-row {
+        flex-direction: column;
+    }
+
+    .name-suggestions {
+        max-height: 260px;
+    }
+}
+/* =========================================================
+   DARK MODE FIXES — SEARCH BY NAME
+   Keeps all inputs, suggestion boxes and text readable
+   ========================================================= */
+
+[data-theme="dark"] .search-wrapper,
+[data-theme="dark"] .search-mode-btn,
+[data-theme="dark"] .name-search-container,
+[data-theme="dark"] .name-search-wrapper {
+    background-color: #0f172a;
+    border-color: #334155;
+}
+
+/* Certificate ID and Name input fields */
+[data-theme="dark"] #cert-id-input,
+[data-theme="dark"] #name-input,
+[data-theme="dark"] input {
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+/* Placeholder visibility */
+[data-theme="dark"] #cert-id-input::placeholder,
+[data-theme="dark"] #name-input::placeholder,
+[data-theme="dark"] input::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+
+/* Labels and helper text */
+[data-theme="dark"] .search-container label,
+[data-theme="dark"] .name-search-container label,
+[data-theme="dark"] .search-hint,
+[data-theme="dark"] .name-search-hint {
+    color: #cbd5e1;
+}
+
+/* Name input text — fixes black/unreadable text */
+[data-theme="dark"] #name-input {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc;
+}
+
+/* Search icon */
+[data-theme="dark"] .search-icon,
+[data-theme="dark"] .name-search-icon {
+    color: #94a3b8;
+}
+
+/* =========================================================
+   NAME AUTOCOMPLETE DROPDOWN
+   ========================================================= */
+
+.name-suggestions,
+#name-suggestions {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-lg);
+    overflow-y: auto;
+    max-height: 280px;
+    z-index: 100;
+}
+
+/* Show approximately 5 suggestions before scrolling */
+.name-suggestions,
+#name-suggestions {
+    max-height: 260px;
+}
+
+/* Individual suggestion */
+.name-suggestion,
+.suggestion-item {
+    color: var(--text-main);
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.name-suggestion:last-child,
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.name-suggestion:hover,
+.suggestion-item:hover,
+.name-suggestion.active,
+.suggestion-item.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+
+/* =========================================================
+   DARK MODE — AUTOCOMPLETE VISIBILITY
+   ========================================================= */
+
+[data-theme="dark"] .name-suggestions,
+[data-theme="dark"] #name-suggestions {
+    background-color: #111827;
+    border-color: #334155;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .name-suggestion,
+[data-theme="dark"] .suggestion-item {
+    color: #f8fafc;
+    background-color: #111827;
+    border-bottom-color: #334155;
+}
+
+[data-theme="dark"] .name-suggestion:hover,
+[data-theme="dark"] .suggestion-item:hover,
+[data-theme="dark"] .name-suggestion.active,
+[data-theme="dark"] .suggestion-item.active {
+    background-color: #1e3a8a;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   MAKE SEARCH MODE BOXES CLEARLY VISIBLE
+   ========================================================= */
+
+[data-theme="dark"] .search-mode-selector,
+[data-theme="dark"] .search-tabs,
+[data-theme="dark"] .search-toggle {
+    background-color: transparent;
+}
+
+[data-theme="dark"] .search-mode-btn {
+    color: #cbd5e1;
+    border: 1px solid #334155;
+}
+
+[data-theme="dark"] .search-mode-btn.active,
+[data-theme="dark"] .search-mode-btn:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+}
+
+/* Focus state */
+[data-theme="dark"] #cert-id-input:focus,
+[data-theme="dark"] #name-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
