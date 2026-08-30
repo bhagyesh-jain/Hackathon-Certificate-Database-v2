@@ -1,4 +1,4 @@
-/* 
+/*
  * IKIGAI 2026 Official Certificate Verification System
  * Verification Result Page Styles
  */
@@ -9,11 +9,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at top right, var(--primary-light), transparent 400px);
+    background: radial-gradient(
+        circle at top right,
+        var(--primary-light),
+        transparent 400px
+    );
 }
 
 [data-theme="dark"] .verify-page-wrapper {
-    background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 400px);
+    background: radial-gradient(
+        circle at top right,
+        rgba(37, 99, 235, 0.1),
+        transparent 400px
+    );
 }
 
 .verification-card {
@@ -28,7 +36,11 @@
     animation: fadeIn 0.5s ease-out;
 }
 
-/* --- Loading State --- */
+
+/* =========================================================
+   LOADING STATE
+========================================================= */
+
 .loading-container {
     padding: 5rem 2rem;
     display: flex;
@@ -63,7 +75,9 @@
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .loading-text h2 {
@@ -88,13 +102,31 @@
 }
 
 @keyframes progressMove {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(250%); }
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(250%);
+    }
 }
 
-/* --- Success & Error States --- */
+
+/* =========================================================
+   SUCCESS & ERROR STATES
+========================================================= */
+
+/*
+ * IMPORTANT:
+ * JS controls visibility using the .hidden class.
+ */
+
 .result-content {
-    display: none; /* Shown via JS */
+    display: block;
+}
+
+.hidden {
+    display: none !important;
 }
 
 .status-banner {
@@ -103,8 +135,13 @@
     border-bottom: 1px solid var(--border-color);
 }
 
-.status-banner.success { background-color: rgba(16, 185, 129, 0.05); }
-.status-banner.error { background-color: rgba(239, 68, 68, 0.05); }
+.status-banner.success {
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.status-banner.error {
+    background-color: rgba(239, 68, 68, 0.05);
+}
 
 .status-icon {
     width: 64px;
@@ -117,8 +154,15 @@
     margin: 0 auto 1.5rem;
 }
 
-.success .status-icon { background: var(--success); color: white; }
-.error .status-icon { background: var(--error); color: white; }
+.success .status-icon {
+    background: var(--success);
+    color: white;
+}
+
+.error .status-icon {
+    background: var(--error);
+    color: white;
+}
 
 .status-title {
     font-size: 1.75rem;
@@ -131,7 +175,11 @@
     font-weight: 500;
 }
 
-/* --- Certificate Details Grid --- */
+
+/* =========================================================
+   CERTIFICATE DETAILS
+========================================================= */
+
 .certificate-details {
     padding: 2.5rem;
 }
@@ -163,7 +211,11 @@
     grid-column: span 2;
 }
 
-/* --- Verification Timeline --- */
+
+/* =========================================================
+   VERIFICATION TIMELINE
+========================================================= */
+
 .verification-timeline {
     margin-top: 3rem;
     padding-top: 2rem;
@@ -223,7 +275,11 @@
     color: var(--text-muted);
 }
 
-/* --- Action Buttons --- */
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
 .action-area {
     padding: 2rem 2.5rem;
     background: var(--bg-body);
@@ -236,7 +292,11 @@
     background: rgba(255, 255, 255, 0.02);
 }
 
-/* --- Error Specifics --- */
+
+/* =========================================================
+   ERROR
+========================================================= */
+
 .error-content {
     padding: 4rem 2rem;
     text-align: center;
@@ -256,7 +316,44 @@
     gap: 1rem;
 }
 
-/* Certificate actions */
+
+/* =========================================================
+   CERTIFICATE ACTIONS
+========================================================= */
+
 #download-pdf-btn {
     text-decoration: none;
+}
+
+
+/* =========================================================
+   NAME SEARCH RESULTS
+========================================================= */
+
+.name-match-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.name-match-card {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-card);
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    transition: all 0.2s ease;
+}
+
+.name-match-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.name-match-name {
+    font-weight: 700;
 }

@@ -1,37 +1,59 @@
 /**
- * IKIGAI26 Certificate Verification
- * Supports Certificate ID and Participant Name search.
+ * IKIGAI 2026 Certificate Verification System
+ *
+ * Public display rules:
+ *
+ * WINNER:
+ *   Name
+ *   Award Category
+ *
+ * FINALIST:
+ *   Name
+ *   Track
+ *
+ * MENTOR / JURY / FACULTY / VOLUNTEER / OTHER:
+ *   Name only
+ *
+ * Never publicly display:
+ *   Certificate ID
+ *   Certificate Number
+ *   Institute / Organization
+ *   Team
  */
 
 const DATA_URL = 'data/certificates.json';
 
 const params = new URLSearchParams(window.location.search);
 
-const escapeHtml = (value) =>
-    String(value || '').replace(/[&<>"']/g, character => ({
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function normalizeText(value) {
+    return String(value || '')
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, ' ');
+}
+
+
+function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, character => ({
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
         "'": '&#039;'
     }[character]));
+}
 
-/**
- * Normalizes text for case-insensitive name matching.
- */
-const normalizeText = (value) =>
-    String(value || '')
-        .trim()
-        .toUpperCase()
-        .replace(/\s+/g, ' ');
 
-/**
- * Converts a Google Drive VIEW URL into a direct download URL.
- */
 function getDownloadUrl(url) {
     if (!url) return '';
 
     const match = String(url).match(/\/d\/([^/]+)/);
+
     if (match && match[1]) {
         return `https://drive.google.com/uc?export=download&id=${match[1]}`;
     }
@@ -39,245 +61,661 @@ function getDownloadUrl(url) {
     return url;
 }
 
-/**
- * Loads the certificate database.
- */
+
+/* =========================================================
+   LOAD DATABASE
+========================================================= */
+
 async function loadCertificates() {
-    const response = await fetch(DATA_URL, { cache: 'no-store' });
+
+    const response = await fetch(DATA_URL, {
+        cache: 'no-store'
+    });
 
     if (!response.ok) {
-        throw new Error('Unable to load certificate database.');
+        throw new Error(
+            `Certificate database could not be loaded. HTTP ${response.status}`
+        );
     }
 
-    return response.json();
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+        throw new Error('Certificate database format is invalid.');
+    }
+
+    return data;
 }
 
-/**
- * Uses the existing page elements where possible.
- */
-function getResultContainer() {
-    return (
-        document.getElementById('verification-result') ||
-        document.getElementById('result-container') ||
-        document.querySelector('.verification-result') ||
-        document.querySelector('main')
-    );
+
+/* =========================================================
+   PAGE STATES
+========================================================= */
+
+function showLoading() {
+
+    const loading = document.getElementById('state-loading');
+    const success = document.getElementById('state-success');
+    const error = document.getElementById('state-error');
+
+    if (loading) loading.classList.remove('hidden');
+    if (success) success.classList.add('hidden');
+    if (error) error.classList.add('hidden');
 }
 
-/**
- * Shows a failure message.
- */
-function showFailure(message) {
-    const container = getResultContainer();
 
-    container.innerHTML = `
-        <div class="verification-failed">
-            <h2>Verification Failed</h2>
-            <p>${escapeHtml(message)}</p>
-            <a href="index.html" class="back-home-btn">Back to Home</a>
-        </div>
-    `;
+function showSuccessState() {
+
+    const loading = document.getElementById('state-loading');
+    const success = document.getElementById('state-success');
+    const error = document.getElementById('state-error');
+
+    if (loading) loading.classList.add('hidden');
+    if (success) success.classList.remove('hidden');
+    if (error) error.classList.add('hidden');
 }
 
-/**
- * Shows multiple name matches.
- */
+
+function showErrorState(message) {
+
+    const loading = document.getElementById('state-loading');
+    const success = document.getElementById('state-success');
+    const error = document.getElementById('state-error');
+
+    if (loading) loading.classList.add('hidden');
+    if (success) success.classList.add('hidden');
+    if (error) error.classList.remove('hidden');
+
+    const subtitle =
+        error?.querySelector('.status-subtitle');
+
+    if (subtitle) {
+        subtitle.textContent = message;
+    }
+}
+
+
+/* =========================================================
+   CERTIFICATE CATEGORY
+========================================================= */
+
+function getCertificateCategory(certificate) {
+
+    const domain = normalizeText(certificate.domain);
+    const type = normalizeText(certificate.type);
+    const category = normalizeText(certificate.category);
+    const sourceGroup = normalizeText(certificate.sourceGroup);
+
+    /*
+     * Winner
+     */
+    if (
+        domain === 'WINNER' ||
+        category === 'WINNER' ||
+        sourceGroup === 'WINNERS'
+    ) {
+        return 'winner';
+    }
+
+    /*
+     * Finalist
+     */
+    if (
+        domain === 'FINALIST' ||
+        category === 'FINALIST' ||
+        sourceGroup === 'FINALISTS' ||
+        type === 'FINALIST CERTIFICATE'
+    ) {
+        return 'finalist';
+    }
+
+    /*
+     * Everything else
+     */
+    return 'other';
+}
+
+
+/* =========================================================
+   PUBLIC DETAILS
+========================================================= */
+
+function hideDetail(elementId) {
+
+    const element = document.getElementById(elementId);
+
+    if (!element) return;
+
+    const item = element.closest('.detail-item');
+
+    if (item) {
+        item.style.display = 'none';
+    }
+}
+
+
+function showDetail(
+    elementId,
+    labelText,
+    value
+) {
+
+    const element = document.getElementById(elementId);
+
+    if (!element) return;
+
+    const item = element.closest('.detail-item');
+
+    if (!item) return;
+
+    item.style.display = '';
+
+    const label = item.querySelector('label');
+
+    if (label) {
+        label.textContent = labelText;
+    }
+
+    element.textContent = value || '---';
+}
+
+
+function updatePublicDetails(certificate) {
+
+    const nameElement =
+        document.getElementById('cert-name');
+
+    /*
+     * Name is ALWAYS public.
+     */
+    if (nameElement) {
+        nameElement.textContent =
+            certificate.name || '---';
+    }
+
+
+    /*
+     * Hide all fields that should NOT be public.
+     */
+    hideDetail('cert-id-display');
+    hideDetail('cert-series');
+    hideDetail('cert-institute');
+    hideDetail('cert-date');
+    hideDetail('cert-team');
+
+
+    /*
+     * Also hide certificate type by default.
+     */
+    hideDetail('cert-type');
+
+
+    const category =
+        getCertificateCategory(certificate);
+
+
+    /* -----------------------------------------------------
+       WINNER
+    ----------------------------------------------------- */
+
+    if (category === 'winner') {
+
+        const award =
+            certificate.awardCategory ||
+            certificate.awardTrack ||
+            certificate.track ||
+            certificate.domain ||
+            'Winner';
+
+        showDetail(
+            'cert-type',
+            'Award Category',
+            award
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------------------
+       FINALIST
+    ----------------------------------------------------- */
+
+    if (category === 'finalist') {
+
+        const track =
+            certificate.track ||
+            certificate.awardTrack ||
+            certificate.awardCategory ||
+            certificate.domain ||
+            'Finalist';
+
+        showDetail(
+            'cert-type',
+            'Track',
+            track
+        );
+
+        return;
+    }
+
+
+    /*
+     * Mentor / Jury / Faculty / Volunteer / Other
+     *
+     * Name only.
+     */
+}
+
+
+/* =========================================================
+   PDF BUTTONS
+========================================================= */
+
+function setupPdfButtons(certificate) {
+
+    const viewButton =
+        document.getElementById('view-pdf-btn');
+
+    const downloadButton =
+        document.getElementById('download-pdf-btn');
+
+    const pdfUrl =
+        certificate.pdfUrl || '';
+
+    const downloadUrl =
+        getDownloadUrl(pdfUrl);
+
+
+    /*
+     * VIEW CERTIFICATE
+     */
+    if (viewButton) {
+
+        if (pdfUrl) {
+
+            viewButton.href = pdfUrl;
+            viewButton.target = '_blank';
+            viewButton.rel = 'noopener noreferrer';
+
+            viewButton.style.display = 'inline-flex';
+
+        } else {
+
+            viewButton.style.display = 'none';
+        }
+    }
+
+
+    /*
+     * DOWNLOAD CERTIFICATE
+     */
+    if (downloadButton) {
+
+        if (downloadUrl) {
+
+            downloadButton.href = downloadUrl;
+            downloadButton.target = '_blank';
+            downloadButton.rel = 'noopener noreferrer';
+
+            downloadButton.style.display = 'inline-flex';
+
+        } else {
+
+            downloadButton.style.display = 'none';
+        }
+    }
+}
+
+
+/* =========================================================
+   SHOW VERIFIED CERTIFICATE
+========================================================= */
+
+function showCertificate(certificate) {
+
+    /*
+     * IMPORTANT:
+     *
+     * We DO NOT replace the HTML.
+     *
+     * verify.html already contains the complete
+     * designed verification interface.
+     */
+
+    updatePublicDetails(certificate);
+
+    setupPdfButtons(certificate);
+
+
+    /*
+     * Verification trace
+     */
+    const timeline =
+        document.getElementById('timeline-issued');
+
+    if (timeline) {
+
+        timeline.textContent =
+            'Officially recorded in the IKIGAI 2026 certificate database.';
+    }
+
+
+    /*
+     * Show existing UI.
+     */
+    showSuccessState();
+}
+
+
+/* =========================================================
+   NAME SEARCH
+========================================================= */
+
 function showNameMatches(matches, query) {
-    const container = getResultContainer();
 
-    container.innerHTML = `
-        <div class="name-search-results">
-            <h2>Matching Participants</h2>
-            <p>${matches.length} matching participant${matches.length === 1 ? '' : 's'} found for <strong>${escapeHtml(query)}</strong>.</p>
+    /*
+     * For multiple matches, use the existing success
+     * container only for the selection list.
+     */
+
+    const success =
+        document.getElementById('state-success');
+
+    if (!success) return;
+
+
+    success.innerHTML = `
+
+        <div class="status-banner success">
+
+            <div class="status-icon">
+                <i class="ph-bold ph-check"></i>
+            </div>
+
+            <h1 class="status-title">
+                Matching Participants
+            </h1>
+
+            <p class="status-subtitle">
+                ${matches.length}
+                matching participant${matches.length === 1 ? '' : 's'}
+                found for "${escapeHtml(query)}".
+            </p>
+
+        </div>
+
+
+        <div class="certificate-details">
+
             <div class="name-match-list">
+
                 ${matches.map(cert => `
+
                     <button
                         type="button"
                         class="name-match-card"
                         data-certificate-id="${escapeHtml(cert.certificateId)}"
                     >
-                        <span class="name-match-name">${escapeHtml(cert.name)}</span>
-                        <span class="name-match-id">${escapeHtml(cert.certificateId)}</span>
-                        <span class="name-match-institute">${escapeHtml(cert.institute || '')}</span>
+
+                        <span class="name-match-name">
+                            ${escapeHtml(cert.name)}
+                        </span>
+
                     </button>
+
                 `).join('')}
+
             </div>
-            <a href="index.html" class="back-home-btn">Back to Home</a>
+
+        </div>
+
+
+        <div class="action-area">
+
+            <a
+                href="index.html"
+                class="btn btn-outline"
+            >
+                <i class="ph-bold ph-arrow-left"></i>
+                <span>Back to Home</span>
+            </a>
+
         </div>
     `;
 
-    container.querySelectorAll('[data-certificate-id]').forEach(button => {
-        button.addEventListener('click', () => {
-            const certificateId = button.dataset.certificateId;
-            window.location.href =
-                `verify.html?id=${encodeURIComponent(certificateId)}`;
-        });
-    });
-}
 
-/**
- * Displays the verified certificate.
- * This function creates a complete result view while preserving
- * View Certificate and Download Certificate actions.
- */
-function showCertificate(certificate) {
-    const container = getResultContainer();
+    /*
+     * Attach selection handlers.
+     */
 
-    const pdfUrl = certificate.pdfUrl || '';
-    const downloadUrl = getDownloadUrl(pdfUrl);
+    success
+        .querySelectorAll('[data-certificate-id]')
+        .forEach(button => {
 
-    container.innerHTML = `
-        <div class="verification-success">
-            <div class="verified-badge">✓ VERIFIED</div>
+            button.addEventListener(
+                'click',
+                () => {
 
-            <h2>Certificate Verified</h2>
+                    const id =
+                        button.dataset.certificateId;
 
-            <div class="certificate-details">
-                <div class="detail-row">
-                    <span>Participant</span>
-                    <strong>${escapeHtml(certificate.name)}</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Certificate ID</span>
-                    <strong>${escapeHtml(certificate.certificateId)}</strong>
-                </div>
-
-                <div class="detail-row">
-                    <span>Certificate Type</span>
-                    <strong>${escapeHtml(certificate.type || 'Participation')}</strong>
-                </div>
-
-                ${certificate.team ? `
-                <div class="detail-row">
-                    <span>Team</span>
-                    <strong>${escapeHtml(certificate.team)}</strong>
-                </div>` : ''}
-
-                ${certificate.institute ? `
-                <div class="detail-row">
-                    <span>Institute</span>
-                    <strong>${escapeHtml(certificate.institute)}</strong>
-                </div>` : ''}
-            </div>
-
-            <div class="certificate-actions">
-                ${pdfUrl ? `
-                    <button type="button" id="view-certificate-btn">
-                        View Certificate
-                    </button>
-                    <button type="button" id="download-certificate-btn">
-                        Download Certificate
-                    </button>
-                ` : ''}
-            </div>
-
-            <a href="index.html" class="back-home-btn">Back to Home</a>
-        </div>
-    `;
-
-    const viewButton = document.getElementById('view-certificate-btn');
-    const downloadButton = document.getElementById('download-certificate-btn');
-
-    if (viewButton) {
-        viewButton.addEventListener('click', () => {
-            window.open(pdfUrl, '_blank', 'noopener');
-        });
-    }
-
-    if (downloadButton) {
-        downloadButton.addEventListener('click', () => {
-            window.open(downloadUrl, '_blank', 'noopener');
-        });
-    }
-}
-
-/**
- * Main verification controller.
- */
-async function initializeVerification() {
-    try {
-        const certificates = await loadCertificates();
-
-        const nameQuery = (params.get('name') || '').trim();
-        const directId = (params.get('id') || '').trim().toUpperCase();
-        const series = (params.get('series') || '').trim().toUpperCase();
-        const number = (params.get('number') || '').trim();
-
-        // --------------------------------------------------
-        // 1. SEARCH BY NAME
-        // --------------------------------------------------
-        if (nameQuery) {
-            const query = normalizeText(nameQuery);
-
-            const startsWithMatches = certificates.filter(certificate =>
-                normalizeText(certificate.name).startsWith(query)
+                    window.location.href =
+                        `verify.html?id=${encodeURIComponent(id)}`;
+                }
             );
+        });
 
-            const matches = startsWithMatches.length
-                ? startsWithMatches
-                : certificates.filter(certificate =>
-                    normalizeText(certificate.name).includes(query)
+
+    showSuccessState();
+}
+
+
+/* =========================================================
+   FIND CERTIFICATE
+========================================================= */
+
+async function initializeVerification() {
+
+    showLoading();
+
+    try {
+
+        const certificates =
+            await loadCertificates();
+
+
+        const directId =
+            (params.get('id') || '')
+                .trim()
+                .toUpperCase();
+
+
+        const nameQuery =
+            (params.get('name') || '')
+                .trim();
+
+
+        const series =
+            (params.get('series') || '')
+                .trim()
+                .toUpperCase();
+
+
+        const number =
+            (params.get('number') || '')
+                .trim();
+
+
+        /* -------------------------------------------------
+           1. CERTIFICATE ID
+        ------------------------------------------------- */
+
+        if (directId) {
+
+            const certificate =
+                certificates.find(item =>
+                    normalizeText(item.certificateId) ===
+                    directId
                 );
 
-            if (!matches.length) {
-                showFailure(`No certificate was found for "${nameQuery}".`);
+
+            if (!certificate) {
+
+                showErrorState(
+                    'The ID entered does not match any records in our database.'
+                );
+
                 return;
             }
+
+
+            showCertificate(certificate);
+
+            return;
+        }
+
+
+        /* -------------------------------------------------
+           2. NAME SEARCH
+        ------------------------------------------------- */
+
+        if (nameQuery) {
+
+            const query =
+                normalizeText(nameQuery);
+
+
+            const exactMatches =
+                certificates.filter(certificate =>
+                    normalizeText(certificate.name) === query
+                );
+
+
+            const startsWithMatches =
+                certificates.filter(certificate =>
+                    normalizeText(certificate.name)
+                        .startsWith(query)
+                );
+
+
+            const containsMatches =
+                certificates.filter(certificate =>
+                    normalizeText(certificate.name)
+                        .includes(query)
+                );
+
+
+            const matches =
+                exactMatches.length
+                    ? exactMatches
+                    : startsWithMatches.length
+                        ? startsWithMatches
+                        : containsMatches;
+
+
+            if (!matches.length) {
+
+                showErrorState(
+                    `No certificate was found for "${nameQuery}".`
+                );
+
+                return;
+            }
+
 
             if (matches.length === 1) {
+
                 showCertificate(matches[0]);
+
                 return;
             }
 
-            showNameMatches(matches, nameQuery);
-            return;
-        }
 
-        // --------------------------------------------------
-        // 2. DIRECT CERTIFICATE ID
-        // --------------------------------------------------
-        if (directId) {
-            const certificate = certificates.find(item =>
-                String(item.certificateId || '').toUpperCase() === directId
+            showNameMatches(
+                matches,
+                nameQuery
             );
 
-            if (!certificate) {
-                showFailure('The ID entered does not match any records in our database.');
-                return;
-            }
-
-            showCertificate(certificate);
             return;
         }
 
-        // --------------------------------------------------
-        // 3. EXISTING SERIES + NUMBER SEARCH
-        // --------------------------------------------------
+
+        /* -------------------------------------------------
+           3. SERIES + NUMBER
+        ------------------------------------------------- */
+
         if (series && number) {
-            const certificate = certificates.find(item => {
-                const itemSeries = String(item.certificateSeries || '').toUpperCase();
-                const itemNumber = String(item.certificateNumber || '').padStart(4, '0');
 
-                return itemSeries === series &&
-                    itemNumber === number.padStart(4, '0');
-            });
+            const certificate =
+                certificates.find(item => {
+
+                    const itemSeries =
+                        normalizeText(
+                            item.certificateSeries
+                        );
+
+
+                    const itemNumber =
+                        String(
+                            item.certificateNumber || ''
+                        ).padStart(4, '0');
+
+
+                    return (
+                        itemSeries === series &&
+                        itemNumber ===
+                            number.padStart(4, '0')
+                    );
+                });
+
 
             if (!certificate) {
-                showFailure('The ID entered does not match any records in our database.');
+
+                showErrorState(
+                    'The certificate number does not match any records in our database.'
+                );
+
                 return;
             }
 
+
             showCertificate(certificate);
+
             return;
         }
 
-        showFailure('Please enter a valid certificate number or participant name.');
 
-    } catch (error) {
-        console.error('Verification error:', error);
-        showFailure('Unable to load the certificate database. Please try again.');
+        /* -------------------------------------------------
+           4. NOTHING PROVIDED
+        ------------------------------------------------- */
+
+        showErrorState(
+            'Please enter a valid certificate ID or participant name.'
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            'Certificate verification error:',
+            error
+        );
+
+
+        showErrorState(
+            'Unable to load the certificate database. Please try again.'
+        );
     }
 }
 
-document.addEventListener('DOMContentLoaded', initializeVerification);
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    initializeVerification
+);
