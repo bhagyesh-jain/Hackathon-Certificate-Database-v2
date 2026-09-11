@@ -26,3 +26,10 @@ The previous test dataset has been replaced with the Round 2 production dataset.
 ## Deployment
 
 This is a static HTML/CSS/JavaScript site and can be deployed to GitHub Pages, Netlify, or another static host.
+
+
+## Final IKIGAI26 data normalization
+- 199 participant certificates: IKIGAI26-0001 through IKIGAI26-0199.
+- 157 special certificates: IKIGAI26-0200 through IKIGAI26-0356.
+- Original special IDs are preserved in `legacyCertificateId` for direct-ID compatibility.
+- HACK26 records are retained.

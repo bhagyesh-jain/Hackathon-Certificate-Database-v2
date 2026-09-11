@@ -128,14 +128,25 @@ const App = (() => {
 
     function idSearch() {
         const selectedSeries = series.value.trim().toUpperCase();
-        const certificateNumber = number.value.trim();
+        const rawInput = number.value.trim().toUpperCase();
 
-        if (!/^\d{4,6}$/.test(certificateNumber)) {
-            return toast('Enter a 4 to 6 digit certificate number');
+        if (!rawInput) {
+            return toast('Enter a certificate number or ID');
+        }
+
+        // If user typed or pasted full certificate ID (e.g. IKIGAI26-0004 or HACK26-0001)
+        if (/^[A-Z0-9]+-\d+$/i.test(rawInput)) {
+            window.location.href = `verify.html?id=${encodeURIComponent(rawInput)}`;
+            return;
+        }
+
+        const digits = rawInput.replace(/\D/g, '');
+        if (!digits || digits.length > 6) {
+            return toast('Enter a valid certificate number (e.g., 0004)');
         }
 
         window.location.href =
-            `verify.html?series=${encodeURIComponent(selectedSeries)}&number=${encodeURIComponent(certificateNumber.padStart(4, '0'))}`;
+            `verify.html?series=${encodeURIComponent(selectedSeries)}&number=${encodeURIComponent(digits.padStart(4, '0'))}`;
     }
 
     function nameSearch() {
@@ -171,7 +182,8 @@ const App = (() => {
 
     function init() {
         number.addEventListener('input', event => {
-            event.target.value = event.target.value.replace(/\D/g, '').slice(0, 6);
+            // Allow uppercase letters, digits, and hyphens up to 15 chars
+            event.target.value = event.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 15);
         });
 
         verify.addEventListener('click', idSearch);

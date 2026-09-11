@@ -75,31 +75,35 @@
 
                     <div class="certificate-details">
                         <div class="details-grid">
-                            <div class="detail-item">
+                            <div class="detail-item" id="cert-name-item">
                                 <label>Recipient Name</label>
                                 <p id="cert-name">---</p>
                             </div>
-                            <div class="detail-item">
+                            <div class="detail-item hidden" id="cert-category-item">
+                                <label id="cert-category-label">Award Category</label>
+                                <p id="cert-category">---</p>
+                            </div>
+                            <div class="detail-item hidden" id="cert-id-item">
                                 <label>Credential ID</label>
                                 <p id="cert-id-display">---</p>
                             </div>
-                            <div class="detail-item">
+                            <div class="detail-item hidden" id="cert-series-item">
                                 <label>Certificate Series</label>
                                 <p id="cert-series">---</p>
                             </div>
-                            <div class="detail-item">
+                            <div class="detail-item hidden" id="cert-type-item">
                                 <label>Certificate Type</label>
                                 <p id="cert-type">---</p>
                             </div>
-                            <div class="detail-item">
+                            <div class="detail-item hidden" id="cert-institute-item">
                                 <label>Institute</label>
                                 <p id="cert-institute">---</p>
                             </div>
-                            <div class="detail-item">
+                            <div class="detail-item hidden" id="cert-date-item">
                                 <label>Issue Date</label>
                                 <p id="cert-date">---</p>
                             </div>
-                            <div class="detail-item full-width">
+                            <div class="detail-item full-width hidden" id="cert-team-item">
                                 <label>Team</label>
                                 <p id="cert-team">---</p>
                             </div>
@@ -137,11 +141,10 @@
                             <i class="ph-bold ph-file-pdf"></i>
                             <span>View Certificate PDF</span>
                         </a>
-
-<a href="#" id="download-pdf-btn" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" style="display:none;">
-    <i class="ph ph-download-simple"></i>
-    Download Certificate
-</a>
+                        <a href="#" id="download-pdf-btn" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" style="display:none;">
+                            <i class="ph ph-download-simple"></i>
+                            <span>Download Certificate</span>
+                        </a>
                     </div>
                 </div>
 
@@ -149,13 +152,32 @@
                 <div id="state-error" class="error-content hidden">
                     <i class="ph-bold ph-warning-octagon error-illustration"></i>
                     <h1 class="status-title">Verification Failed</h1>
-                    <p class="status-subtitle">The ID entered does not match any records in our database.</p>
+                    <p class="status-subtitle" id="error-subtitle">The ID entered does not match any records in our database.</p>
                     
                     <div class="error-actions">
                         <a href="index.html" class="btn btn-primary">
                             <i class="ph-bold ph-arrow-left"></i>
                             <span>Back to Home</span>
                         </a>
+                    </div>
+                </div>
+
+                <!-- 4. MULTIPLE MATCHES STATE -->
+                <div id="state-multiple" class="result-content hidden">
+                    <div class="status-banner info">
+                        <div class="status-icon info-icon">
+                            <i class="ph-bold ph-users-three"></i>
+                        </div>
+                        <h1 class="status-title">Matching Participants</h1>
+                        <p class="status-subtitle" id="multiple-subtitle">Multiple records found. Select a participant to verify.</p>
+                    </div>
+
+                    <div class="multiple-matches-container">
+                        <div id="multiple-matches-list" class="name-match-list"></div>
+                    </div>
+
+                    <div class="action-area">
+                        <a href="index.html" class="btn btn-outline">Verify Another</a>
                     </div>
                 </div>
 
